@@ -20,9 +20,12 @@
         "types": ["node"],
         "paths": {
             "*": ["./*"],
+            "#factories/*": ["./src/factories/*"],
             "#interfaces/*": ["./src/interfaces/*"],
             "#processors/*": ["./src/processors/*"],
-            "#strategies/*": ["./src/strategies/*"]
+            "#products/*": ["./src/products/*"],
+            "#strategies/*": ["./src/strategies/*"],
+            "#types/*": ["./src/types/*"]
         }
     },
     "include": [
