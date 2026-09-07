@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "noImplicitOverride": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "ES2022",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "declaration": true,
+        "outDir": "dist",
+        "rootDir": "src",
+        "types": ["node"],
+        "paths": {
+            "*": ["./*"],
+            "#interfaces/*": ["./src/interfaces/*"],
+            "#processors/*": ["./src/processors/*"],
+            "#strategies/*": ["./src/strategies/*"]
+        }
+    },
+    "include": [
+        "src/**/*"
+    ]
+}

@@ -1,0 +1,24 @@
+{
+    "name": "strategies",
+    "version": "1.0.0",
+    "main": "dist/main.js",
+    "types": "dist/main.d.ts",
+    "imports": {
+        "#interfaces/*": "./dist/interfaces/*.js",
+        "#processors/*": "./dist/processors/*.js",
+        "#strategies/*": "./dist/strategies/*.js"
+    },
+    "scripts": {
+        "build": "npx tsc",
+        "clean": "rm -rf dist tsconfig.tsbuildinfo",
+        "start": "npm run build && node dist/main.js"
+    },
+    "files": [
+        "dist"
+    ],
+    "type": "module",
+    "devDependencies": {
+        "@types/node": "^26.5.0",
+        "typescript": "^7.0.2"
+    }
+}
