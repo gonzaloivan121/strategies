@@ -12,4 +12,12 @@ export interface UsageData {
      * @memberof UsageData
      */
     timestamp: Date;
+
+    /**
+     * The amount of consumption or usage that is being billed, which may be used in pricing calculations.
+     *
+     * @type {number}
+     * @memberof UsageData
+     */
+    consumption: number;
 }

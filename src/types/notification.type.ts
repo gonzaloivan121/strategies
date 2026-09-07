@@ -6,4 +6,4 @@
  * @export
  * @type {NotificationType}
  */
-export type NotificationType = "Email" | "SMS" | "Push";
+export type NotificationType = "Email" | "SMS" | "Push" | "Discord";

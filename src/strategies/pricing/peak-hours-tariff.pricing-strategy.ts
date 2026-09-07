@@ -1,3 +1,4 @@
+import { PeakHour } from "#interfaces/peak-hour.interface";
 import { PricingStrategy } from "#interfaces/pricing-strategy.interface";
 import { UsageData } from "#interfaces/usage-data.interface";
 
@@ -10,23 +11,19 @@ import { UsageData } from "#interfaces/usage-data.interface";
  */
 export class PeakHoursTariff implements PricingStrategy {
     /**
-     * An array of hours (in 24-hour format) that are considered peak hours for the purpose of applying a surcharge.
+     * An array of peak hours with their corresponding multipliers for pricing calculations.
      *
      * @private
-     * @type {number[]}
+     * @type {PeakHour[]}
      * @memberof PeakHoursTariff
      */
-    private readonly peakHours: number[] = [17, 18, 19, 20];
-
-    /**
-     * The multiplier used to calculate the surcharge during peak hours.
-     * For example, a multiplier of 1.5 means a 50% increase in price during peak hours.
-     *
-     * @private
-     * @type {number}
-     * @memberof PeakHoursTariff
-     */
-    private readonly multiplier: number = 1.5;
+    private readonly peakHours: PeakHour[] = [
+        { hour: 17, multiplier: 1.25 },
+        { hour: 18, multiplier: 1.50 },
+        { hour: 19, multiplier: 1.75 },
+        { hour: 20, multiplier: 1.50 },
+        { hour: 21, multiplier: 1.25 },
+    ];
 
     /**
      * Calculates the total price by applying a peak hour surcharge if the usage timestamp falls within the defined peak hours.
@@ -39,8 +36,9 @@ export class PeakHoursTariff implements PricingStrategy {
     Calculate(basePrice: number, usageData: UsageData): number {
         const usageHour = usageData.timestamp.getHours();
 
-        if (this.peakHours.includes(usageHour)) {
-            return basePrice * this.multiplier;
+        const peakHour = this.peakHours.find(ph => ph.hour === usageHour);
+        if (peakHour) {
+            return basePrice * peakHour.multiplier;
         }
 
         return basePrice;

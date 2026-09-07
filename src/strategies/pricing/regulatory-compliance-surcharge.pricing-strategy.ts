@@ -28,6 +28,6 @@ export class RegulatoryComplianceSurcharge implements PricingStrategy {
      * @memberof RegulatoryComplianceSurcharge
      */
     Calculate(basePrice: number, usageData: UsageData): number {
-        return basePrice * (1 + this.surchargeRate);
+        return basePrice + (usageData.consumption * this.surchargeRate);
     }
 }

@@ -9,5 +9,6 @@ export interface User {
     email: Email;
     phone: PhoneNumber;
     deviceId: UUID;
+    discordUsername: string;
     notificationType: NotificationType;
 }

@@ -2,6 +2,7 @@ import { BillingProcessor } from "#processors/billing/billing.processor";
 
 import { PeakHoursTariff } from "#strategies/pricing/peak-hours-tariff.pricing-strategy";
 import { RegulatoryComplianceSurcharge } from "#strategies/pricing/regulatory-compliance-surcharge.pricing-strategy";
+import { WeekendDiscount } from "#strategies/pricing/weekend-discount.pricing-strategy";
 
 import { User } from "#interfaces/user.interface";
 
@@ -9,13 +10,16 @@ import { NotificationFactory } from "#factories/notification/notification.factor
 import { EmailNotification } from "#products/notification/email.notification";
 import { PushNotification } from "#products/notification/push.notification";
 import { SMSNotification } from "#products/notification/sms.notification";
+import { DiscordNotification } from "#products/notification/discord.notification";
 
 const billingProcessor: BillingProcessor = new BillingProcessor();
 billingProcessor.AddStrategy(new PeakHoursTariff());
+billingProcessor.AddStrategy(new WeekendDiscount());
 billingProcessor.AddStrategy(new RegulatoryComplianceSurcharge());
 
 const finalPrice = billingProcessor.CalculateTotal(100, {
-    timestamp: new Date("2024-06-01T18:00:00Z"),
+    timestamp: new Date(),
+    consumption: 100,
 });
 
 const user: User = {
@@ -24,7 +28,8 @@ const user: User = {
     email: "john.doe@example.com",
     phone: "+1 (123) 456-7890",
     deviceId: crypto.randomUUID(),
-    notificationType: "Push",
+    discordUsername: "john_doe#1234",
+    notificationType: "Discord",
 };
 
 const notificationFactory: NotificationFactory<User> =
@@ -43,6 +48,11 @@ notificationFactory.RegisterChannel("SMS", {
 notificationFactory.RegisterChannel("Push", {
     CreateNotification: () => new PushNotification(),
     ResolveRecipient: (user: User) => user.deviceId,
+});
+
+notificationFactory.RegisterChannel("Discord", {
+    CreateNotification: () => new DiscordNotification(),
+    ResolveRecipient: (user: User) => user.discordUsername,
 });
 
 const { notificationService, recipient } =
