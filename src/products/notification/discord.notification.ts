@@ -22,8 +22,11 @@ export class DiscordNotification implements Notification {
 
             // Here you would implement the actual discord message sending logic, e.g., using a Discord API library.
 
-            // For the sake of this example, we'll assume the discord message was sent successfully.
-            resolve(true);
+            // Simulate an asynchronous operation, such as sending a message via the Discord API.
+            setTimeout(() => {
+                // For the sake of this example, we'll assume the discord message was sent successfully.
+                resolve(true);
+            }, 1000);
         }
     )};
 }

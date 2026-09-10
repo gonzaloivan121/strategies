@@ -22,8 +22,11 @@ export class PushNotification implements Notification {
 
             // Here you would implement the actual push notification sending logic, e.g., using a push notification service API.
 
-            // For the sake of this example, we'll assume the push notification was sent successfully.
-            resolve(true);
+            // Simulate an asynchronous operation, such as sending a message via the Push Notification API.
+            setTimeout(() => {
+                // For the sake of this example, we'll assume the push notification was sent successfully.
+                resolve(true);
+            }, 1000);
         }
     )};
 }

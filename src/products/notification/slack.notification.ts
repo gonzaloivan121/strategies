@@ -22,8 +22,11 @@ export class SlackNotification implements Notification {
 
             // Here you would implement the actual Slack message sending logic, e.g., using a Slack API library.
 
-            // For the sake of this example, we'll assume the Slack message was sent successfully.
-            resolve(true);
+            // Simulate an asynchronous operation, such as sending a message via the Slack API.
+            setTimeout(() => {
+                // For the sake of this example, we'll assume the Slack message was sent successfully.
+                resolve(true);
+            }, 1000);
         }
     )};
 }

@@ -22,8 +22,11 @@ export class SMSNotification implements Notification {
 
             // Here you would implement the actual SMS sending logic, e.g., using an SMS gateway API.
 
-            // For the sake of this example, we'll assume the SMS was sent successfully.
-            resolve(true);
+            // Simulate an asynchronous operation, such as sending a message via the SMS API.
+            setTimeout(() => {
+                // For the sake of this example, we'll assume the SMS was sent successfully.
+                resolve(true);
+            }, 1000);
         }
     )};
 }

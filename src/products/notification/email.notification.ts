@@ -22,8 +22,11 @@ export class EmailNotification implements Notification {
 
             // Here you would implement the actual email sending logic, e.g., using an SMTP library or an email service API.
 
-            // For the sake of this example, we'll assume the email was sent successfully.
-            resolve(true);
-        }
-    )};
+            // Simulate an asynchronous operation, such as sending a message via the Email API.
+            setTimeout(() => {
+                // For the sake of this example, we'll assume the email was sent successfully.
+                resolve(true);
+            }, 1000);
+        });
+    };
 }
