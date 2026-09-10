@@ -20,12 +20,13 @@
         "types": ["node"],
         "paths": {
             "*": ["./*"],
-            "#factories/*": ["./src/factories/*"],
-            "#interfaces/*": ["./src/interfaces/*"],
-            "#processors/*": ["./src/processors/*"],
-            "#products/*": ["./src/products/*"],
-            "#strategies/*": ["./src/strategies/*"],
-            "#types/*": ["./src/types/*"]
+            "#factories/*":     ["./src/factories/*"],
+            "#interfaces/*":    ["./src/interfaces/*"],
+            "#processors/*":    ["./src/processors/*"],
+            "#products/*":      ["./src/products/*"],
+            "#strategies/*":    ["./src/strategies/*"],
+            "#types/*":         ["./src/types/*"],
+            "#workflows/*":     ["./src/workflows/*"]
         }
     },
     "include": [

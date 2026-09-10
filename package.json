@@ -4,12 +4,13 @@
     "main": "dist/main.js",
     "types": "dist/main.d.ts",
     "imports": {
-        "#factories/*": "./dist/factories/*.js",
-        "#interfaces/*": "./dist/interfaces/*.js",
-        "#processors/*": "./dist/processors/*.js",
-        "#products/*": "./dist/products/*.js",
-        "#strategies/*": "./dist/strategies/*.js",
-        "#types/*": "./dist/types/*.js"
+        "#factories/*":     "./dist/factories/*.js",
+        "#interfaces/*":    "./dist/interfaces/*.js",
+        "#processors/*":    "./dist/processors/*.js",
+        "#products/*":      "./dist/products/*.js",
+        "#strategies/*":    "./dist/strategies/*.js",
+        "#types/*":         "./dist/types/*.js",
+        "#workflows/*":     "./dist/workflows/*.js"
     },
     "scripts": {
         "build": "npx tsc",
