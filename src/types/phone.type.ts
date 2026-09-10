@@ -1,6 +1,29 @@
+/**
+ * The country code part of a phone number.
+ *
+ * @type {number}
+ */
 type CountryCode = number;
+
+/**
+ * The area code part of a phone number.
+ *
+ * @type {number}
+ */
 type AreaCode = number;
+
+/**
+ * The local number part of a phone number.
+ *
+ * @type {number}
+ */
 type LocalNumber = number;
+
+/**
+ * The extension part of a phone number.
+ *
+ * @type {number}
+ */
 type Extension = number;
 
 /**
