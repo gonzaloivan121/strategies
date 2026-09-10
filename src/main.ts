@@ -1,18 +1,7 @@
-import { BillingWorkflow } from "#workflows/billing/billing.workflow";
-import { CreateDemoUser } from "#workflows/billing/create-demo-user";
-import { defaultBillingWorkflowConfiguration } from "#workflows/billing/default-billing.workflow-configuration";
+import { CreateApplication } from "#interfaces/application.interface";
 
-const billingWorkflow = new BillingWorkflow(defaultBillingWorkflowConfiguration);
+import { BillingApplication } from "#applications/billing.application";
+import { appConfig } from "#applications/billing/billing.config";
 
-const workflowResult = await billingWorkflow.Execute({
-    basePrice: 100,
-    usageData: {
-        timestamp: new Date(),
-        consumption: 100,
-    },
-    recipientSource: CreateDemoUser("Slack"),
-});
-
-if (workflowResult.notificationSent) {
-    console.log(`Notification sent to [${workflowResult.recipient}]`);
-}
+CreateApplication(BillingApplication, appConfig)
+    .catch((error) => console.error(error));
