@@ -1,0 +1,54 @@
+name: Bug report
+description: Report a reproducible problem in the sandbox
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug.
+        Please provide enough detail for us to reproduce and verify the issue.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: One sentence description of the bug
+      placeholder: Pricing total is incorrect when usage is during peak hour on weekend
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Exact steps, inputs, and timing details
+      placeholder: |
+        1. Configure usage timestamp to ...
+        2. Run ...
+        3. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      placeholder: What happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Logs, screenshots, environment, or test output
