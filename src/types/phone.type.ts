@@ -1,5 +1,5 @@
-type CountryCode = `+${number}`;
-type AreaCode = `(${number})`;
+type CountryCode = number;
+type AreaCode = number;
 type LocalNumber = number;
 type Extension = number;
 
@@ -11,7 +11,7 @@ type Extension = number;
  * @export
  * @type {PhoneNumber}
  */
-export type PhoneNumber = `${CountryCode} ${AreaCode} ${LocalNumber}-${Extension}`;
+export type PhoneNumber = `+${CountryCode} (${AreaCode}) ${LocalNumber}-${Extension}`;
 
 /**
  * A type representing a short phone number in the format "({area code}) {local number}-{extension}".
@@ -21,7 +21,7 @@ export type PhoneNumber = `${CountryCode} ${AreaCode} ${LocalNumber}-${Extension
  * @export
  * @type {ShortPhoneNumber}
  */
-export type ShortPhoneNumber = `${AreaCode} ${LocalNumber}-${Extension}`;
+export type ShortPhoneNumber = `(${AreaCode}) ${LocalNumber}-${Extension}`;
 
 /**
  * A type representing an international phone number in the format "+<country code> <local number>".
@@ -31,4 +31,14 @@ export type ShortPhoneNumber = `${AreaCode} ${LocalNumber}-${Extension}`;
  * @export
  * @type {InternationalPhoneNumber}
  */
-export type InternationalPhoneNumber = `${CountryCode} ${LocalNumber}`;
+export type InternationalPhoneNumber = `+${CountryCode} ${LocalNumber}`;
+
+/**
+ * A type representing a standard phone number in the format "+<country code><area code><local number>".
+ *
+ * @example
+ * const phone: StandardPhoneNumber = "+11234567890";
+ * @export
+ * @type {StandardPhoneNumber}
+ */
+export type StandardPhoneNumber = `+${CountryCode}${AreaCode}${LocalNumber}`;
