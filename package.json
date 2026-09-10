@@ -4,6 +4,7 @@
     "main": "dist/main.js",
     "types": "dist/main.d.ts",
     "imports": {
+        "#applications/*":  "./dist/applications/*.js",
         "#factories/*":     "./dist/factories/*.js",
         "#interfaces/*":    "./dist/interfaces/*.js",
         "#processors/*":    "./dist/processors/*.js",

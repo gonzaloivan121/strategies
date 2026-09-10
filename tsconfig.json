@@ -20,6 +20,7 @@
         "types": ["node"],
         "paths": {
             "*": ["./*"],
+            "#applications/*":  ["./src/applications/*"],
             "#factories/*":     ["./src/factories/*"],
             "#interfaces/*":    ["./src/interfaces/*"],
             "#processors/*":    ["./src/processors/*"],

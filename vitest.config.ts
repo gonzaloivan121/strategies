@@ -8,13 +8,14 @@ const srcRoot = fileURLToPath(new URL("./src", import.meta.url));
 export default defineConfig({
     resolve: {
         alias: {
-            "#factories":   resolve(srcRoot, "factories"),
-            "#interfaces":  resolve(srcRoot, "interfaces"),
-            "#processors":  resolve(srcRoot, "processors"),
-            "#products":    resolve(srcRoot, "products"),
-            "#strategies":  resolve(srcRoot, "strategies"),
-            "#types":       resolve(srcRoot, "types"),
-            "#workflows":   resolve(srcRoot, "workflows"),
+            "#applications":    resolve(srcRoot, "applications"),
+            "#factories":       resolve(srcRoot, "factories"),
+            "#interfaces":      resolve(srcRoot, "interfaces"),
+            "#processors":      resolve(srcRoot, "processors"),
+            "#products":        resolve(srcRoot, "products"),
+            "#strategies":      resolve(srcRoot, "strategies"),
+            "#types":           resolve(srcRoot, "types"),
+            "#workflows":       resolve(srcRoot, "workflows"),
         },
     },
     test: {
