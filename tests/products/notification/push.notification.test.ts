@@ -12,10 +12,13 @@ describe("PushNotification", () => {
             const notification = new PushNotification();
 
             await expect(
-                notification.Send("device-xyz", "Hello via push"),
+                notification.Send(
+                    "65156c3b-4e8a-42a7-b077-b8da754ee788",
+                    "Hello via push",
+                ),
             ).resolves.toBe(true);
             expect(logSpy).toHaveBeenCalledWith(
-                "Sending Push Notification to device [device-xyz]: Hello via push",
+                "Sending Push Notification to device [65156c3b-4e8a-42a7-b077-b8da754ee788]: Hello via push",
             );
         } finally {
             logSpy.mockRestore();

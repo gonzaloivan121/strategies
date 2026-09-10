@@ -12,10 +12,10 @@ describe("EmailNotification", () => {
             const notification = new EmailNotification();
 
             await expect(
-                notification.Send("alex@example.com", "Hello via email"),
+                notification.Send("john.doe@example.com", "Hello via email"),
             ).resolves.toBe(true);
             expect(logSpy).toHaveBeenCalledWith(
-                "Sending Email to [alex@example.com]: Hello via email",
+                "Sending Email to [john.doe@example.com]: Hello via email",
             );
         } finally {
             logSpy.mockRestore();
