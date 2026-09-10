@@ -4,21 +4,23 @@
     "main": "dist/main.js",
     "types": "dist/main.d.ts",
     "imports": {
-        "#applications/*":  "./dist/applications/*.js",
-        "#factories/*":     "./dist/factories/*.js",
-        "#interfaces/*":    "./dist/interfaces/*.js",
-        "#processors/*":    "./dist/processors/*.js",
-        "#products/*":      "./dist/products/*.js",
-        "#strategies/*":    "./dist/strategies/*.js",
-        "#types/*":         "./dist/types/*.js",
-        "#workflows/*":     "./dist/workflows/*.js"
+        "#applications/*": "./dist/applications/*.js",
+        "#factories/*": "./dist/factories/*.js",
+        "#interfaces/*": "./dist/interfaces/*.js",
+        "#processors/*": "./dist/processors/*.js",
+        "#products/*": "./dist/products/*.js",
+        "#strategies/*": "./dist/strategies/*.js",
+        "#types/*": "./dist/types/*.js",
+        "#workflows/*": "./dist/workflows/*.js"
     },
     "scripts": {
         "build": "npx tsc",
         "clean": "rm -rf dist tsconfig.tsbuildinfo",
         "start": "npm run build && node dist/main.js",
         "test": "vitest run",
-        "test:watch": "vitest"
+        "test:watch": "vitest",
+        "test:doctor": "vitest doctor",
+        "test:coverage": "vitest run --coverage"
     },
     "files": [
         "dist"
@@ -26,6 +28,7 @@
     "type": "module",
     "devDependencies": {
         "@types/node": "^26.5.0",
+        "@vitest/coverage-v8": "^5.0.0",
         "typescript": "^7.0.2",
         "vitest": "^5.0.0"
     }
