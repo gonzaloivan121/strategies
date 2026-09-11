@@ -16,7 +16,7 @@ The demo application executes a full flow:
 1. Build a billing pipeline from pricing strategies.
 2. Calculate a final price from usage data.
 3. Resolve a recipient from a user profile.
-4. Dispatch a notification through the selected channel.
+4. Dispatch notifications through the selected channels.
 
 ## What Is Implemented
 
