@@ -1,6 +1,6 @@
 import { Notification } from "#interfaces/notification.interface";
 
-import { NotificationType } from "#types/notification.type";
+import { NotificationChannel } from "#types/notification.type";
 
 /**
  * Registration contract for a notification channel.
@@ -56,99 +56,99 @@ export interface NotificationDispatch {
  */
 export class NotificationFactory<TRecipientSource> {
     /**
-     * A registry mapping notification types to their respective channel registrations.
+     * A registry mapping notification channels to their respective channel registrations.
      *
      * @private
      * @type {Map<
-     *         NotificationType,
+     *         NotificationChannel,
      *         NotificationChannelRegistration<TRecipientSource>
      *     >}
      * @memberof NotificationFactory
      */
     private readonly registry: Map<
-        NotificationType,
+        NotificationChannel,
         NotificationChannelRegistration<TRecipientSource>
     > = new Map();
 
     /**
      * Registers a notification channel at runtime.
      *
-     * @param {NotificationType} type - The notification type key.
+     * @param {NotificationChannel} channel - The notification channel key.
      * @param {NotificationChannelRegistration<TRecipientSource>} registration - The channel registration payload.
      * @memberof NotificationFactory
      */
     public RegisterChannel(
-        type: NotificationType,
+        channel: NotificationChannel,
         registration: NotificationChannelRegistration<TRecipientSource>,
     ): void {
-        this.registry.set(type, registration);
+        this.registry.set(channel, registration);
     }
 
     /**
-     * Creates an instance of a `Notification` based on the provided type.
+     * Creates an instance of a `Notification` based on the provided channel.
      *
-     * @param {NotificationType} type - The type of `Notification` to create.
+     * @param {NotificationChannel} channel - The channel of the `Notification` to create.
      * @returns {Notification} The created `Notification` instance.
      * @memberof NotificationFactory
      */
-    public CreateNotification(type: NotificationType): Notification {
-        const channel = this.GetChannel(type);
-        return channel.CreateNotification();
+    public CreateNotification(channel: NotificationChannel): Notification {
+        const registration = this.GetChannelRegistration(channel);
+        return registration.CreateNotification();
     }
 
     /**
      * Resolves the correct recipient value for a channel from a source object.
      *
-     * @param {NotificationType} type - The notification type key.
+     * @param {NotificationChannel} channel - The notification channel key.
      * @param {TRecipientSource} source - Source object containing recipient fields.
      * @returns {string} The resolved recipient.
      * @memberof NotificationFactory
      */
     public ResolveRecipient(
-        type: NotificationType,
+        channel: NotificationChannel,
         source: TRecipientSource,
     ): string {
-        const channel = this.GetChannel(type);
-        return channel.ResolveRecipient(source);
+        const registration = this.GetChannelRegistration(channel);
+        return registration.ResolveRecipient(source);
     }
 
     /**
      * Creates both the notification service and the resolved recipient for dispatch.
      *
-     * @param {NotificationType} type - The notification type key.
+     * @param {NotificationChannel} channel - The notification channel key.
      * @param {TRecipientSource} source - Source object containing recipient fields.
      * @returns {NotificationDispatch} The dispatch payload.
      * @memberof NotificationFactory
      */
     public CreateNotificationDispatch(
-        type: NotificationType,
+        channel: NotificationChannel,
         source: TRecipientSource,
     ): NotificationDispatch {
-        const channel = this.GetChannel(type);
+        const registration = this.GetChannelRegistration(channel);
 
         return {
-            notificationService: channel.CreateNotification(),
-            recipient: channel.ResolveRecipient(source),
+            notificationService: registration.CreateNotification(),
+            recipient: registration.ResolveRecipient(source),
         };
     }
 
     /**
-     * Retrieves the channel registration for a given notification type from the registry.
+     * Retrieves the channel registration for a given notification channel from the registry.
      *
      * @private
-     * @param {NotificationType} type - The notification type key.
+     * @param {NotificationChannel} channel - The notification channel key.
      * @returns {NotificationChannelRegistration<TRecipientSource>} The channel registration for the given notification type.
      * @memberof NotificationFactory
      */
-    private GetChannel(
-        type: NotificationType,
+    private GetChannelRegistration(
+        channel: NotificationChannel,
     ): NotificationChannelRegistration<TRecipientSource> {
-        const channel = this.registry.get(type);
+        const registration = this.registry.get(channel);
 
-        if (!channel) {
-            throw new Error(`Unsupported notification type: ${type}`);
+        if (!registration) {
+            throw new Error(`Unsupported notification type: ${channel}`);
         }
 
-        return channel;
+        return registration;
     }
 }

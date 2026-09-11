@@ -1,15 +1,15 @@
 import { User } from "#interfaces/user.interface";
 
-import { NotificationType } from "#types/notification.type";
+import { NotificationChannel } from "#types/notification.type";
 
 /**
- * Creates a demo user with the specified notification type.
+ * Creates a demo user with the specified notification channels.
  *
  * @export
- * @param {NotificationType} notificationType - The notification type for the demo user.
+ * @param {NotificationChannel[]} notificationChannels - The notification channels for the demo user.
  * @returns {User} The created demo user.
  */
-export function CreateDemoUser(notificationType: NotificationType): User {
+export function CreateDemoUser(notificationChannels: NotificationChannel[]): User {
     return {
         id: crypto.randomUUID(),
         name: "John Doe",
@@ -18,6 +18,6 @@ export function CreateDemoUser(notificationType: NotificationType): User {
         deviceId: crypto.randomUUID(),
         discordUsername: "john_doe#1234",
         slackUsername: "john_doe",
-        notificationType,
+        notificationChannels,
     };
 }

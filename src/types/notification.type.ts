@@ -1,9 +1,9 @@
 /**
- * A type representing the different notification types available in the system.
+ * A type representing the different notification channels available in the system.
  *
  * @example
- * const notificationType: NotificationType = "Email";
+ * const notificationChannel: NotificationChannel = "Email";
  * @export
- * @type {NotificationType}
+ * @type {NotificationChannel}
  */
-export type NotificationType = "Email" | "SMS" | "Push" | "Discord" | "Slack";
+export type NotificationChannel = "Email" | "SMS" | "Push" | "Discord" | "Slack";

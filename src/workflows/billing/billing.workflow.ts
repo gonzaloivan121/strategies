@@ -8,7 +8,7 @@ import { UsageData } from "#interfaces/usage-data.interface";
 
 import { BillingProcessor } from "#processors/billing/billing.processor";
 
-import { NotificationType } from "#types/notification.type";
+import { NotificationChannel } from "#types/notification.type";
 
 /**
  * Represents a source that can receive notifications.
@@ -18,19 +18,19 @@ import { NotificationType } from "#types/notification.type";
  */
 export interface NotifiableRecipientSource {
     /**
-     * The type of notification that the recipient source can receive.
+     * The notification channels that the recipient source can receive.
      *
-     * @type {NotificationType}
+     * @type {NotificationChannel[]}
      * @memberof NotifiableRecipientSource
      */
-    notificationType: NotificationType;
+    notificationChannels: readonly NotificationChannel[];
 }
 
 /**
  * Represents a definition of a notification channel for a specific recipient source.
  */
 export type NotificationChannelDefinition<TRecipientSource> = readonly [
-    NotificationType,
+    NotificationChannel,
     NotificationChannelRegistration<TRecipientSource>,
 ];
 
@@ -111,6 +111,38 @@ export interface BillingWorkflowConfiguration<
 }
 
 /**
+ * Represents a single notification dispatch result for the billing workflow.
+ *
+ * @export
+ * @interface BillingWorkflowNotificationResult
+ */
+export interface BillingWorkflowNotificationResult {
+    /**
+     * The notification channel used for this dispatch.
+     *
+     * @type {NotificationChannel}
+     * @memberof BillingWorkflowNotificationResult
+     */
+    channel: NotificationChannel;
+
+    /**
+     * The resolved recipient who received the notification.
+     *
+     * @type {string}
+     * @memberof BillingWorkflowNotificationResult
+     */
+    recipient: string;
+
+    /**
+     * Indicates whether this channel notification was successfully sent.
+     *
+     * @type {boolean}
+     * @memberof BillingWorkflowNotificationResult
+     */
+    notificationSent: boolean;
+}
+
+/**
  * Represents the result of executing the billing workflow.
  *
  * @export
@@ -126,15 +158,23 @@ export interface BillingWorkflowResult {
     finalPrice: number;
     
     /**
-     * The recipient who will receive the notification.
+     * The message that was sent to the recipient.
      *
      * @type {string}
      * @memberof BillingWorkflowResult
      */
-    recipient: string;
+    message: string;
 
     /**
-     * Indicates whether the notification was successfully sent.
+     * The per-channel notification dispatch results.
+     *
+     * @type {BillingWorkflowNotificationResult[]}
+     * @memberof BillingWorkflowResult
+     */
+    notifications: BillingWorkflowNotificationResult[];
+
+    /**
+     * Indicates whether all configured notifications were successfully sent.
      *
      * @type {boolean}
      * @memberof BillingWorkflowResult
@@ -238,21 +278,41 @@ export class BillingWorkflow<TRecipientSource extends NotifiableRecipientSource>
             input.usageData,
         );
 
-        const { notificationService, recipient } =
-            this.notificationFactory.CreateNotificationDispatch(
-                input.recipientSource.notificationType,
-                input.recipientSource,
-            );
+        const message = this.configuration.BuildMessage(finalPrice, input);
 
-        const notificationSent = await notificationService.Send(
-            recipient,
-            this.configuration.BuildMessage(finalPrice, input),
-        );
+        const notifications: BillingWorkflowNotificationResult[] =
+            await Promise.all(
+                input.recipientSource.notificationChannels.map(
+                    async (notificationChannel) => {
+                        const { notificationService, recipient } =
+                            this.notificationFactory.CreateNotificationDispatch(
+                                notificationChannel,
+                                input.recipientSource,
+                            );
+
+                        const notificationSent = await notificationService.Send(
+                            recipient,
+                            message,
+                        );
+
+                        return {
+                            channel: notificationChannel,
+                            recipient,
+                            notificationSent,
+                        };
+                    },
+                ),
+            );
 
         return {
             finalPrice,
-            recipient,
-            notificationSent,
+            message,
+            notifications,
+            notificationSent:
+                notifications.length > 0 &&
+                notifications.every(
+                    (notification) => notification.notificationSent,
+                ),
         };
     }
 }

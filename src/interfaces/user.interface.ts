@@ -1,7 +1,7 @@
 import { UUID } from "#types/uuid.type";
 import { Email } from "#types/email.type";
 import { PhoneNumber } from "#types/phone.type";
-import { NotificationType } from "#types/notification.type";
+import { NotificationChannel } from "#types/notification.type";
 
 /**
  * Represents a user in the system.
@@ -67,10 +67,10 @@ export interface User {
     slackUsername: string;
 
     /**
-     * The notification type of the `User`.
+     * The notification channels of the `User`.
      *
-     * @type {NotificationType}
+     * @type {NotificationChannel[]}
      * @memberof User
      */
-    notificationType: NotificationType;
+    notificationChannels: NotificationChannel[];
 }

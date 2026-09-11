@@ -28,11 +28,22 @@ export class BillingApplication implements Application {
                 timestamp: new Date(),
                 consumption: 100,
             },
-            recipientSource: CreateDemoUser("Slack"),
+            recipientSource: CreateDemoUser(["Email", "Push", "SMS"]),
         });
 
-        if (workflowResult.notificationSent) {
-            console.log(`Notification sent to [${workflowResult.recipient}]`);
+        if (workflowResult.notifications.length === 0) {
+            console.log("No notification channels configured for this user.");
+            return;
+        }
+
+        for (const notificationResult of workflowResult.notifications) {
+            const deliveryStatus = notificationResult.notificationSent
+                ? "sent"
+                : "failed";
+
+            console.log(
+                `Notification ${deliveryStatus} via ${notificationResult.channel} to [${notificationResult.recipient}]: ${workflowResult.message}`,
+            );
         }
     }
 
