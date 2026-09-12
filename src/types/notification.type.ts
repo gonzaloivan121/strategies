@@ -6,4 +6,4 @@
  * @export
  * @type {NotificationChannel}
  */
-export type NotificationChannel = "Email" | "SMS" | "Push" | "Discord" | "Slack";
+export type NotificationChannel = "Email" | "SMS" | "Push";

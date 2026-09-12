@@ -51,22 +51,6 @@ export interface User {
     deviceId: UUID;
 
     /**
-     * The Discord username of the `User`.
-     *
-     * @type {string}
-     * @memberof User
-     */
-    discordUsername: string;
-
-    /**
-     * The Slack username of the `User`.
-     *
-     * @type {string}
-     * @memberof User
-     */
-    slackUsername: string;
-
-    /**
      * The notification channels of the `User`.
      *
      * @type {NotificationChannel[]}

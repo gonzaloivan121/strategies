@@ -3,8 +3,6 @@ import { User } from "#interfaces/user.interface";
 import { EmailNotification } from "#products/notification/email.notification";
 import { SMSNotification } from "#products/notification/sms.notification";
 import { PushNotification } from "#products/notification/push.notification";
-import { DiscordNotification } from "#products/notification/discord.notification";
-import { SlackNotification } from "#products/notification/slack.notification";
 
 import { PeakHoursTariff } from "#strategies/pricing/peak-hours-tariff.pricing-strategy";
 import { RegulatoryComplianceSurcharge } from "#strategies/pricing/regulatory-compliance-surcharge.pricing-strategy";
@@ -45,20 +43,6 @@ export const defaultBillingWorkflowConfiguration: BillingWorkflowConfiguration<U
             {
                 CreateNotification: () => new PushNotification(),
                 ResolveRecipient: (user: User) => user.deviceId,
-            },
-        ],
-        [
-            "Discord",
-            {
-                CreateNotification: () => new DiscordNotification(),
-                ResolveRecipient: (user: User) => user.discordUsername,
-            },
-        ],
-        [
-            "Slack",
-            {
-                CreateNotification: () => new SlackNotification(),
-                ResolveRecipient: (user: User) => user.slackUsername,
             },
         ],
     ],

@@ -1,4 +1,4 @@
-import { UsageData } from "./usage-data.interface";
+import { UsageData } from "#interfaces/usage-data.interface";
 
 /**
  * This interface defines the structure for pricing strategies used in the billing processor.

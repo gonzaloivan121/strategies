@@ -30,11 +30,11 @@ type Extension = number;
  * A type representing a phone number in the format "+<country code> (<area code>) <local number>-<extension>".
  *
  * @example
- * const phone: PhoneNumber = "+1 (123) 456-7890";
+ * const phone: USPhoneNumber = "+1 (123) 456-7890";
  * @export
  * @type {PhoneNumber}
  */
-export type PhoneNumber = `+${CountryCode} (${AreaCode}) ${LocalNumber}-${Extension}`;
+export type USPhoneNumber = `+${CountryCode} (${AreaCode}) ${LocalNumber}-${Extension}`;
 
 /**
  * A type representing a short phone number in the format "({area code}) {local number}-{extension}".
@@ -60,8 +60,8 @@ export type InternationalPhoneNumber = `+${CountryCode} ${LocalNumber}`;
  * A type representing a standard phone number in the format "+<country code><area code><local number>".
  *
  * @example
- * const phone: StandardPhoneNumber = "+11234567890";
+ * const phone: PhoneNumber = "+11234567890";
  * @export
- * @type {StandardPhoneNumber}
+ * @type {PhoneNumber}
  */
-export type StandardPhoneNumber = `+${CountryCode}${AreaCode}${LocalNumber}`;
+export type PhoneNumber = `+${CountryCode}${AreaCode}${LocalNumber}`;

@@ -14,10 +14,8 @@ export function CreateDemoUser(notificationChannels: NotificationChannel[]): Use
         id: crypto.randomUUID(),
         name: "John Doe",
         email: "john.doe@example.com",
-        phone: "+1 (123) 456-7890",
+        phone: "+01234567890",
         deviceId: crypto.randomUUID(),
-        discordUsername: "john_doe#1234",
-        slackUsername: "john_doe",
         notificationChannels,
     };
 }
