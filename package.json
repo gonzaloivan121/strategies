@@ -1,22 +1,39 @@
 {
     "name": "strategies",
     "version": "1.0.0",
-    "main": "dist/main.js",
-    "types": "dist/main.d.ts",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        },
+        "./demo": "./dist/main.js"
+    },
     "imports": {
         "#applications/*": "./dist/applications/*.js",
+        "#errors/*": "./dist/errors/*.js",
         "#factories/*": "./dist/factories/*.js",
         "#interfaces/*": "./dist/interfaces/*.js",
+        "#persistence/*": "./dist/persistence/*.js",
         "#processors/*": "./dist/processors/*.js",
         "#products/*": "./dist/products/*.js",
+        "#services/*": "./dist/services/*.js",
         "#strategies/*": "./dist/strategies/*.js",
         "#types/*": "./dist/types/*.js",
         "#workflows/*": "./dist/workflows/*.js"
     },
     "scripts": {
         "build": "npx tsc",
-        "clean": "rm -rf dist tsconfig.tsbuildinfo",
+        "clean": "rimraf dist tsconfig.tsbuildinfo",
         "start": "npm run build && node dist/main.js",
+        "start:utility": "npm run build && node dist/utility-rest.main.js",
+        "start:utility:dist": "node dist/utility-rest.main.js",
+        "ci:test": "npm run build && npm test",
+        "pack:check": "npm pack --dry-run",
+        "prepublishOnly": "npm run ci:test",
+        "docker:up": "docker compose up --build",
+        "docker:down": "docker compose down",
         "test": "vitest run",
         "test:watch": "vitest",
         "test:doctor": "vitest doctor",
@@ -26,9 +43,15 @@
         "dist"
     ],
     "type": "module",
+    "dependencies": {
+        "express": "^5.1.0",
+        "mysql2": "^3.15.1"
+    },
     "devDependencies": {
+        "@types/express": "^5.0.3",
         "@types/node": "^26.5.0",
         "@vitest/coverage-v8": "^5.0.0",
+        "rimraf": "^6.0.1",
         "typescript": "^7.0.2",
         "vitest": "^5.0.0"
     }

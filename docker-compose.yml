@@ -1,0 +1,46 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: strategies-utility-api
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      UTILITY_PERSISTENCE_MODE: mysql
+      UTILITY_API_HOST: 0.0.0.0
+      UTILITY_API_PORT: 3010
+      UTILITY_MYSQL_HOST: mysql
+      UTILITY_MYSQL_PORT: 3306
+      UTILITY_MYSQL_USER: utility_app
+      UTILITY_MYSQL_PASSWORD: utility_app_password
+      UTILITY_MYSQL_DATABASE: utility_billing
+      UTILITY_MYSQL_CONNECTION_LIMIT: 8
+    ports:
+      - "3010:3010"
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.4
+    container_name: strategies-utility-mysql
+    environment:
+      MYSQL_DATABASE: utility_billing
+      MYSQL_USER: utility_app
+      MYSQL_PASSWORD: utility_app_password
+      MYSQL_ROOT_PASSWORD: utility_root_password
+    command: ["--default-authentication-plugin=mysql_native_password"]
+    ports:
+      - "3306:3306"
+    volumes:
+      - utility_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-putility_root_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  utility_mysql_data:

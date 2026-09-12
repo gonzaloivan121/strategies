@@ -21,10 +21,13 @@
         "paths": {
             "*": ["./*"],
             "#applications/*":  ["./src/applications/*"],
+            "#errors/*":        ["./src/errors/*"],
             "#factories/*":     ["./src/factories/*"],
             "#interfaces/*":    ["./src/interfaces/*"],
+            "#persistence/*":   ["./src/persistence/*"],
             "#processors/*":    ["./src/processors/*"],
             "#products/*":      ["./src/products/*"],
+            "#services/*":      ["./src/services/*"],
             "#strategies/*":    ["./src/strategies/*"],
             "#types/*":         ["./src/types/*"],
             "#workflows/*":     ["./src/workflows/*"]
