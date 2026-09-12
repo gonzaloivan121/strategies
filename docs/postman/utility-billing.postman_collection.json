@@ -1,0 +1,284 @@
+{
+  "info": {
+    "name": "Strategies Utility Billing API",
+    "description": "End-to-end utility billing flow: customer, tariff, billing cycle, meter readings, invoice, payment, overdue assessment.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3010" },
+    { "key": "requestIdPrefix", "value": "usage-postman" },
+    { "key": "customerId", "value": "" },
+    { "key": "billingCycleId", "value": "" },
+    { "key": "meterId", "value": "" },
+    { "key": "invoiceId", "value": "" },
+    { "key": "billingRunIdempotencyKey", "value": "billrun-acc001-2026-11" },
+    { "key": "paymentIdempotencyKey", "value": "payment-inv-2026-001-1" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-request-id", "value": "{{requestIdPrefix}}-health" }
+        ],
+        "url": "{{baseUrl}}/health"
+      }
+    },
+    {
+      "name": "OpenAPI",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-request-id", "value": "{{requestIdPrefix}}-openapi" }
+        ],
+        "url": "{{baseUrl}}/openapi.json"
+      }
+    },
+    {
+      "name": "Create Customer",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 201', function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "var body = pm.response.json();",
+              "pm.collectionVariables.set('customerId', body.id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "content-type", "value": "application/json" },
+          { "key": "x-request-id", "value": "{{requestIdPrefix}}-customer-create" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accountNumber\": \"ACC-001\",\n  \"externalId\": \"cust-001\",\n  \"fullName\": \"Jane Utility\",\n  \"email\": \"jane.utility@example.com\",\n  \"phone\": \"+15550101000\",\n  \"notificationChannels\": [\"Email\"],\n  \"serviceAddress\": {\n    \"line1\": \"100 Main Street\",\n    \"city\": \"Austin\",\n    \"region\": \"TX\",\n    \"postalCode\": \"78701\",\n    \"country\": \"US\"\n  }\n}"
+        },
+        "url": "{{baseUrl}}/customers"
+      }
+    },
+    {
+      "name": "List Customers",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-request-id", "value": "{{requestIdPrefix}}-customers-list" }
+        ],
+        "url": "{{baseUrl}}/customers"
+      }
+    },
+    {
+      "name": "Create Tariff Plan",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 201', function () {",
+              "  pm.response.to.have.status(201);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "content-type", "value": "application/json" },
+          { "key": "x-request-id", "value": "{{requestIdPrefix}}-tariff-create" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"residential-v1\",\n  \"name\": \"Residential V1\",\n  \"currency\": \"USD\",\n  \"baseRatePerKwh\": 0.14,\n  \"fixedCharge\": 8.5,\n  \"weekendDiscountRate\": 0.05,\n  \"regulatoryChargePerKwh\": 0.015,\n  \"taxRate\": 0.12,\n  \"peakWindows\": [\n    {\n      \"startHour\": 18,\n      \"endHour\": 22,\n      \"multiplier\": 1.3,\n      \"daysOfWeek\": [1, 2, 3, 4, 5]\n    }\n  ]\n}"
+        },
+        "url": "{{baseUrl}}/tariff-plans"
+      }
+    },
+    {
+      "name": "Create Billing Cycle",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 201', function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "var body = pm.response.json();",
+              "pm.collectionVariables.set('billingCycleId', body.id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "content-type", "value": "application/json" },
+          { "key": "x-request-id", "value": "{{requestIdPrefix}}-cycle-create" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customerId\": \"{{customerId}}\",\n  \"startsAt\": \"2026-11-01T00:00:00.000Z\",\n  \"endsAt\": \"2026-11-30T23:59:59.999Z\",\n  \"dueAt\": \"2026-12-10T00:00:00.000Z\"\n}"
+        },
+        "url": "{{baseUrl}}/billing-cycles"
+      }
+    },
+    {
+      "name": "Create Meter Readings",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (!pm.collectionVariables.get('meterId')) {",
+              "  pm.collectionVariables.set('meterId', pm.variables.replaceIn('{{$guid}}'));",
+              "}"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 201', function () {",
+              "  pm.response.to.have.status(201);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "content-type", "value": "application/json" },
+          { "key": "x-request-id", "value": "{{requestIdPrefix}}-readings-create" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"meterId\": \"{{meterId}}\",\n  \"customerId\": \"{{customerId}}\",\n  \"timezone\": \"America/Chicago\",\n  \"intervals\": [\n    {\n      \"startedAt\": \"2026-11-02T01:00:00.000Z\",\n      \"endedAt\": \"2026-11-02T02:00:00.000Z\",\n      \"consumedKwh\": 1.8\n    },\n    {\n      \"startedAt\": \"2026-11-02T18:00:00.000Z\",\n      \"endedAt\": \"2026-11-02T19:00:00.000Z\",\n      \"consumedKwh\": 2.2\n    },\n    {\n      \"startedAt\": \"2026-11-09T18:00:00.000Z\",\n      \"endedAt\": \"2026-11-09T19:00:00.000Z\",\n      \"consumedKwh\": 2.0\n    }\n  ]\n}"
+        },
+        "url": "{{baseUrl}}/meter-readings"
+      }
+    },
+    {
+      "name": "Run Billing",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 201', function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "var body = pm.response.json();",
+              "pm.collectionVariables.set('invoiceId', body.invoice.id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "content-type", "value": "application/json" },
+          { "key": "Idempotency-Key", "value": "{{billingRunIdempotencyKey}}" },
+          { "key": "x-request-id", "value": "{{requestIdPrefix}}-billing-run" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customerId\": \"{{customerId}}\",\n  \"billingCycleId\": \"{{billingCycleId}}\",\n  \"tariffPlanId\": \"residential-v1\",\n  \"meterId\": \"{{meterId}}\",\n  \"invoiceNumber\": \"INV-2026-001\",\n  \"issuedAt\": \"2026-12-01T00:00:00.000Z\"\n}"
+        },
+        "url": "{{baseUrl}}/billing-runs"
+      }
+    },
+    {
+      "name": "Get Invoice",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-request-id", "value": "{{requestIdPrefix}}-invoice-get" }
+        ],
+        "url": "{{baseUrl}}/invoices/{{invoiceId}}"
+      }
+    },
+    {
+      "name": "Apply Payment",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 201', function () {",
+              "  pm.response.to.have.status(201);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "content-type", "value": "application/json" },
+          { "key": "Idempotency-Key", "value": "{{paymentIdempotencyKey}}" },
+          { "key": "x-request-id", "value": "{{requestIdPrefix}}-payment-apply" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"invoiceId\": \"{{invoiceId}}\",\n  \"amount\": 12.0,\n  \"method\": \"Card\",\n  \"reference\": \"PMT-2026-001\"\n}"
+        },
+        "url": "{{baseUrl}}/payments"
+      }
+    },
+    {
+      "name": "List Payments",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "x-request-id", "value": "{{requestIdPrefix}}-payments-list" }
+        ],
+        "url": "{{baseUrl}}/payments?invoiceId={{invoiceId}}"
+      }
+    },
+    {
+      "name": "Assess Overdue",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "content-type", "value": "application/json" },
+          { "key": "x-request-id", "value": "{{requestIdPrefix}}-overdue-assess" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"asOf\": \"2026-12-20T00:00:00.000Z\",\n  \"policy\": {\n    \"graceDays\": 2,\n    \"dailyRate\": 0.01,\n    \"fixedFee\": 2.0,\n    \"maximumFee\": 50.0\n  }\n}"
+        },
+        "url": "{{baseUrl}}/invoices/{{invoiceId}}/overdue-assessments"
+      }
+    }
+  ]
+}
